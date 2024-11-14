@@ -20,22 +20,4 @@ if(isset($_GET['id'])) {
     $sql = "SELECT * FROM usuarios WHERE id = $id"; // Vulnerable a SQL Injection
     $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            echo "id: " . $row["id"]. " - Nombre: " . $row["nombre"]. "<br>";
-        }
-    } else {
-        echo "0 resultados";
-    }
-}
-
-// Vulnerabilidad de Cross-Site Scripting (XSS)
-// El siguiente código es vulnerable a XSS ya que imprime directamente en el HTML el contenido de una variable que puede ser manipulada por el usuario sin ninguna sanitización.
-if(isset($_GET['mensaje'])) {
-    $mensaje = $_GET['mensaje']; // Input del usuario susceptible a XSS
-    echo "<div>$mensaje</div>"; // Vulnerable a XSS
-}
-
-// Cerrar conexión
-$conn->close();
-?>
+    echo "<div>" . htmlentities($mensaje, ENT_QUOTES, 'UTF-8') . "</div>"; // Properly encoded to prevent XSS
