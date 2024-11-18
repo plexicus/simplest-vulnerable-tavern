@@ -9,20 +9,14 @@ $dbname = "tu_base_de_datos";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verificar conexión
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
-}
-
-// Vulnerabilidad de SQL Injection
-// El siguiente código es vulnerable a SQL Injection ya que el input del usuario se concatena directamente en la consulta SQL sin validación o sanitización.
 if(isset($_GET['id'])) {
-    $id = $_GET['id']; // Input del usuario tomado directamente desde la URL
-    $sql = "SELECT * FROM usuarios WHERE id = $id"; // Vulnerable a SQL Injection
+    $id = intval($_GET['id']); // Sanitize user input by converting to integer
+    $sql = "SELECT * FROM usuarios WHERE id = $id"; // Safe from SQL Injection
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            echo "id: " . $row["id"]. " - Nombre: " . $row["nombre"]. "<br>";
+            echo "id: " . htmlentities($row["id"]) . " - Nombre: " . htmlentities($row["nombre"]) . "<br>"; // Prevent XSS
         }
     } else {
         echo "0 resultados";
@@ -32,8 +26,8 @@ if(isset($_GET['id'])) {
 // Vulnerabilidad de Cross-Site Scripting (XSS)
 // El siguiente código es vulnerable a XSS ya que imprime directamente en el HTML el contenido de una variable que puede ser manipulada por el usuario sin ninguna sanitización.
 if(isset($_GET['mensaje'])) {
-    $mensaje = $_GET['mensaje']; // Input del usuario susceptible a XSS
-    echo "<div>$mensaje</div>"; // Vulnerable a XSS
+    $mensaje = htmlentities($_GET['mensaje']); // Encode user input to prevent XSS
+    echo "<div>$mensaje</div>"; // Safe from XSS
 }
 
 // Cerrar conexión
