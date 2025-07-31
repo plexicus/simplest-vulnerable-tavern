@@ -24,7 +24,7 @@ if(isset($_GET['id'])) {
         while($row = $result->fetch_assoc()) {
             echo "id: " . $row["id"]. " - Nombre: " . $row["nombre"]. "<br>";
         }
-    } else {
+    echo "<div>" . htmlentities($mensaje) . "</div>"; // Sanitized to prevent XSS
         echo "0 resultados";
     }
 }
