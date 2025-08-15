@@ -26,6 +26,8 @@ if(isset($_GET['id'])) {
         }
     } else {
         echo "0 resultados";
+    $mensaje = htmlentities($_GET['mensaje']); // Sanitized input to mitigate XSS
+    echo "<div>$mensaje</div>"; // Secure output
     }
 }
 
