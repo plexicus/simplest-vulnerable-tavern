@@ -27,6 +27,7 @@ if(isset($_GET['id'])) {
     } else {
         echo "0 resultados";
     }
+    echo "<div>" . htmlentities($mensaje, ENT_QUOTES, 'UTF-8') . "</div>"; // Properly encoded to prevent XSS
 }
 
 // Vulnerabilidad de Cross-Site Scripting (XSS)
