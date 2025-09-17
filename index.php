@@ -22,7 +22,7 @@ if(isset($_GET['id'])) {
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            echo "id: " . $row["id"]. " - Nombre: " . $row["nombre"]. "<br>";
+            echo "id: " . htmlentities($row["id"]). " - Nombre: " . htmlentities($row["nombre"]). "<br>";
         }
     } else {
         echo "0 resultados";
