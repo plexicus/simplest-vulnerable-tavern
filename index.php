@@ -1,4 +1,7 @@
 <?php
+function htmlEncode($data) {
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
 // Conexión a la base de datos (modifica con tus propios parámetros de conexión)
 $servername = "localhost";
 $username = "tu_usuario";
