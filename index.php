@@ -8,17 +8,35 @@ $dbname = "tu_base_de_datos";
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Verificar conexión
+// Verificar conexi\u00f3n
 if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+    die("Conexi\u00f3n fallida: " . $conn->connect_error);
 }
 
-// Vulnerabilidad de SQL Injection
-// El siguiente código es vulnerable a SQL Injection ya que el input del usuario se concatena directamente en la consulta SQL sin validación o sanitización.
+// Mitigated SQL Injection Vulnerability
 if(isset($_GET['id'])) {
-    $id = $_GET['id']; // Input del usuario tomado directamente desde la URL
-    $sql = "SELECT * FROM usuarios WHERE id = $id"; // Vulnerable a SQL Injection
-    $result = $conn->query($sql);
+    $id = $_GET['id'];
+
+    // Validate the input to ensure it's numeric
+    if (is_numeric($id)) {
+        // Use prepared statements to prevent SQL Injection
+        $stmt = $conn->prepare("SELECT * FROM usuarios WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($stmt->num_rows > 0) {
+            while($row = $stmt->fetch_assoc()) {
+                echo "<div>"htmlspecialchars($row['mensaje']";}}
+                echo "id: " . htmlspecialchars($row["id"], ENT_QUOTES, 'UTF-8') . " - Nombre: " . htmlspecialchars($row["nombre"], ENT_QUOTES, 'UTF-8') . "<br>";
+            }
+        } else {
+            echo "0 resultados";
+        }
+    } else {
+        echo "ID inv\u00e1lido.";
+    }
+}
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
